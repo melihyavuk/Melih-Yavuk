@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ev Hazırlık Rehberi</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --success: #22c55e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .progress-container {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            margin-bottom: 2rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: var(--bg);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #818cf8);
+            width: 0%;
+            transition: width 0.5s ease-out;
+        }
+
+        .category {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            animation: slideUp 0.8s ease-out backwards;
+            transition: transform 0.3s ease;
+        }
+        
+        .category:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        .category-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background: var(--bg);
+            margin-bottom: 0.5rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .task-item:hover {
+            transform: translateX(5px);
+            background: #f1f5f9;
+        }
+
+        .task-item.completed {
+            background: #f0fdf4;
+        }
+
+        .task-item.completed .task-text {
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #cbd5e1;
+            border-radius: 6px;
+            margin-right: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .task-item.completed .checkbox {
+            background: var(--success);
+            border-color: var(--success);
+        }
+
+        .task-item.completed .checkbox::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+        }
+
+        .task-text {
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Delay child animations */
+        .category:nth-child(3) { animation-delay: 0.1s; }
+        .category:nth-child(4) { animation-delay: 0.2s; }
+        .category:nth-child(5) { animation-delay: 0.3s; }
+
+        @media (max-width: 600px) {
+            body { padding: 1rem; }
+            .header h1 { font-size: 2rem; }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>🏡 Ev Hazırlık Rehberi</h1>
+        <p>Yeni evinize taşınırken veya evinizi yenilerken yapmanız gerekenler</p>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-header">
+            <span>Genel İlerleme</span>
+            <span id="progress-text">0%</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+    </div>
+
+    <!-- Kategori 1 -->
+    <div class="category">
+        <h2 class="category-title">📦 Taşınma Öncesi</h2>
+        <ul class="task-list">
+            <li class="task-item" onclick="toggleTask(this)">
+                <div class="checkbox"></div>
+                <span class="task-text">Kullanılmayan eşyaların ayıklanması ve bağışlanması</span>
+            </li>
+            <li class="task-item" onclick="toggleTask(this)">
+                <div class="checkbox"></div>
+                <span class="task-text">Nakliye firması ile anlaşma yapılması</span>
+            </li>
+            <li class="task-item" onclick="toggleTask(this)">
+                <div class="checkbox"></div>
+                <span class="task-text">Koli ve ambalaj malzemelerinin temin edilmesi</span>
+            </li>
+            <li class="task-item" onclick="toggleTask(this)">
+                <div class="checkbox"></div>
+                <span class="task-text">Eşyaların odalara göre kutulanması ve etiketlenmesi</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Kategori 2 -->
+    <div class="category">
+        <h2 class="category-title">📄 Resmi İşlemler ve Abonelikler</h2>
+        <ul class="task-list">
+            <li class="task-item" onclick="toggleTask(this)">
+                <div class="checkbox"></div>
+                <span class="task-text">Elektrik, su ve doğalgaz aboneliklerinin taşınması</span>
+            </li>
+            <li class="task-item" onclick="toggleTask(this)">
+                <div class="checkbox"></div>
+                <span class="task-text">İnternet aboneliğinin nakil işlemi</span>
+            </li>
+            <li class="task-item" onclick="toggleTask(this)">
+                <div class="checkbox"></div>
+                <span class="task-text">İkametgah adresinin güncellenmesi</span>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Kategori 3 -->
+    <div class="category">
+        <h2 class="category-title">🧹 Yeni Eve Giriş</h2>
+        <ul class="task-list">
+            <li class="task-item" onclick="toggleTask(this)">
+                <div class="checkbox"></div>
+                <span class="task-text">Evin genel temizliğinin yapılması veya yaptırılması</span>
+            </li>
+            <li class="task-item" onclick="toggleTask(this)">
+                <div class="checkbox"></div>
+                <span class="task-text">Gerekli ise boya ve tadilat işlemlerinin tamamlanması</span>
+            </li>
+            <li class="task-item" onclick="toggleTask(this)">
+                <div class="checkbox"></div>
+                <span class="task-text">Kapı kilitlerinin / göbeğinin değiştirilmesi (Güvenlik Önlemi)</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    function toggleTask(element) {
+        // Play small click animation
+        element.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+            element.style.transform = '';
+            element.classList.toggle('completed');
+            updateProgress();
+            saveProgress();
+        }, 100);
+    }
+
+    function updateProgress() {
+        const totalTasks = document.querySelectorAll('.task-item').length;
+        const completedTasks = document.querySelectorAll('.task-item.completed').length;
+        
+        const percentage = Math.round((completedTasks / totalTasks) * 100);
+        
+        document.getElementById('progress-fill').style.width = percentage + '%';
+        document.getElementById('progress-text').innerText = percentage + '%';
+    }
+
+    function saveProgress() {
+        const tasks = document.querySelectorAll('.task-item');
+        const state = Array.from(tasks).map(task => task.classList.contains('completed'));
+        localStorage.setItem('evHazirlikState', JSON.stringify(state));
+    }
+
+    function loadProgress() {
+        const savedState = localStorage.getItem('evHazirlikState');
+        if (savedState) {
+            const state = JSON.parse(savedState);
+            const tasks = document.querySelectorAll('.task-item');
+            tasks.forEach((task, index) => {
+                if (state[index]) {
+                    task.classList.add('completed');
+                }
+            });
+        }
+        updateProgress();
+    }
+
+    // Yüklenince ilerlemeyi al ve göster
+    document.addEventListener('DOMContentLoaded', loadProgress);
+</script>
+
+</body>
+</html>
